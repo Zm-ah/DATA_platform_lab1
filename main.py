@@ -50,7 +50,7 @@ print(df[['id','price','currency',
 
 
 
-# ===== REJECT =====
+# REJECT - ta bort rader som har flaggor
 
 df_clean = df[
     (df['flag_missing_currency'] == False) &
@@ -65,3 +65,15 @@ print("\nAntal rader före:", len(df))
 print("Antal rader efter:", len(df_clean))
 
 
+
+# load data till analytics_summary.csv
+
+analytics_summary = pd.DataFrame({
+    'snittpris': [df_clean['price'].mean()],
+    'medianpris': [df_clean['price'].median()],
+    'antal_produkter': [len(df_clean)],
+    'antal_produkter_med_saknat_pris': [df['price'].isna().sum()]
+})
+
+analytics_summary.to_csv('analytics_summary.csv', index=False)
+print("\nAnalytics summary saved to analytics_summary.csv")
